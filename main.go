@@ -1,9 +1,22 @@
 package main
 
 import (
-	"fmt"
+	"log"
+
+	"github.com/amanycodes/distributed-fs/p2p"
 )
 
 func main() {
-	fmt.Println("distributed fs")
+	tcpOpts := p2p.TCPTransportOpts{
+		ListenAddr:    ":3000",
+		HandshakeFunc: p2p.NOPHandshakeFunc,
+		Decoder:       p2p.GOBDecoder{},
+	}
+	tr := p2p.NewTCPTransport(tcpOpts)
+
+	if err := tr.ListenAndAccept(); err != nil {
+		log.Fatal(err)
+	}
+
+	select {}
 }
